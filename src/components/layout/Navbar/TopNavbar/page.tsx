@@ -57,14 +57,14 @@ const data: NavMenu = [
     id: 3,
     type: "MenuItem",
     label: "New Arrivals",
-    url: "/#new-arrivals",
+    url: "/newarrivals",
     children: [],
   },
   {
     id: 4,
     type: "MenuItem",
     label: "Brands",
-    url: "/#top-",
+    url: "/brands",
     children: [],
   },
 ];
