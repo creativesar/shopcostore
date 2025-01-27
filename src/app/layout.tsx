@@ -6,6 +6,7 @@ import TopNavbar from "@/components/layout/Navbar/TopNavbar/page";
 import Footer from "@/components/layout/Footer/page";
 import HolyLoader from "holy-loader";
 import Providers from "./providers";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Shopco",
@@ -23,7 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={satoshi.className}>
+      <body
+        data-new-gr-c-s-check-loaded="14.1147.0"
+        data-gr-ext-installed=""
+        className={satoshi.className}
+      >
         <HolyLoader color="#868686" />
         <TopBanner />
         <Providers>
