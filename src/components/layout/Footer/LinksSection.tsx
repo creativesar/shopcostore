@@ -11,22 +11,22 @@ const footerLinksData: FooterLinks[] = [
       {
         id: 11,
         label: "about",
-        url: "#",
+        url: "/company/about",
       },
       {
         id: 12,
         label: "features",
-        url: "#",
+        url: "/company/features",
       },
       {
         id: 13,
         label: "works",
-        url: "#",
+        url: "/company/works",
       },
       {
         id: 14,
         label: "career",
-        url: "#",
+        url: "/company/careers",
       },
     ],
   },
@@ -37,22 +37,22 @@ const footerLinksData: FooterLinks[] = [
       {
         id: 21,
         label: "customer support",
-        url: "#",
+        url: "/help/customercare",
       },
       {
         id: 22,
         label: "delivery details",
-        url: "#",
+        url: "/help/deliverydetail",
       },
       {
         id: 23,
         label: "terms & conditions",
-        url: "#",
+        url: "/help/termsandconditions",
       },
       {
         id: 24,
         label: "privacy policy",
-        url: "#",
+        url: "/help/privacypolicy",
       },
     ],
   },
@@ -63,22 +63,22 @@ const footerLinksData: FooterLinks[] = [
       {
         id: 31,
         label: "account",
-        url: "#",
+        url: "/faq/accounts",
       },
       {
         id: 32,
         label: "manage deliveries",
-        url: "#",
+        url: "/faq/managedelivers",
       },
       {
         id: 33,
         label: "orders",
-        url: "#",
+        url: "/faq/orders",
       },
       {
         id: 34,
         label: "payments",
-        url: "#",
+        url: "/faq/payments",
       },
     ],
   },
@@ -89,7 +89,7 @@ const footerLinksData: FooterLinks[] = [
       {
         id: 41,
         label: "Free eBooks",
-        url: "#",
+        url: "/freebooks",
       },
       {
         id: 42,

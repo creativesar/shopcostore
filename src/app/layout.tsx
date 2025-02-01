@@ -6,9 +6,7 @@ import TopNavbar from "@/components/layout/Navbar/TopNavbar/page";
 import Footer from "@/components/layout/Footer/page";
 import HolyLoader from "holy-loader";
 import Providers from "./providers";
-import {
-  ClerkProvider
-} from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Shopco",
