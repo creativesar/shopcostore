@@ -1,3 +1,4 @@
+
 import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 import { satoshi } from "@/styles/fonts";
@@ -7,6 +8,7 @@ import Footer from "@/components/layout/Footer/page";
 import HolyLoader from "holy-loader";
 import Providers from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
+
 
 export const metadata: Metadata = {
   title: "Shopco",
@@ -23,18 +25,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // @ts-expect-error Server Component is not compatible with Client Components in ClerkProvider
     <ClerkProvider>
     <html lang="en">
-      <body className={satoshi.className}>
-        <HolyLoader color="#868686" />
-        <TopBanner />
-        <Providers>
-          <TopNavbar />
-          {children}
-        </Providers>
-        <Footer />
-      </body>
-    </html>
-    </ClerkProvider>
+      
+        <body className={satoshi.className}>
+          <HolyLoader color="#868686" />
+          <TopBanner />
+          <Providers>
+            <TopNavbar /> 
+            {children}
+          </Providers>
+          <Footer />
+        </body>
+      </html></ClerkProvider>
   );
 }
