@@ -22,32 +22,42 @@ const Chatbot = () => {
 
     const lowerCaseMessage = input.toLowerCase();
 
-    if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi") || lowerCaseMessage.includes("hey there")) {
-      botResponse = "Hello! How can I assist you today? May I know your name, please?";
-    } else if (lowerCaseMessage.includes("my name is")) {
-      botResponse = `Greetings, ${input.split("is")[1].trim()}! How can I help you today?`;
+    if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi") || lowerCaseMessage.includes("hey")) {
+      botResponse = "Hi there! How can I assist you today? Can I get your name, please?";
+    } else if (lowerCaseMessage.includes("my name is") || lowerCaseMessage.includes("i'm")) {
+      botResponse = `Nice to meet you, ${input.split("is")[1].trim()}! What can I help you with today?`;
     } else if (lowerCaseMessage.includes("price") || lowerCaseMessage.includes("cost") || lowerCaseMessage.includes("how much")) {
-      botResponse = "For pricing information, please visit our products page or contact support for detailed queries.";
-    } else if (lowerCaseMessage.includes("size") || lowerCaseMessage.includes("sizes")) {
-      botResponse = "Our sizes range from XS to XXL. You can find a detailed size chart on each product page.";
-    } else if (lowerCaseMessage.includes("shipping") || lowerCaseMessage.includes("deliver") || lowerCaseMessage.includes("shipping cost")) {
-      botResponse = "We offer worldwide shipping. Visit our shipping info page for more details about shipping costs.";
-    } else if (lowerCaseMessage.includes("return") || lowerCaseMessage.includes("exchange")) {
-      botResponse = "We accept returns within 30 days of purchase in original condition. Please visit our returns page for more info.";
-    } else if (lowerCaseMessage.includes("payment") || lowerCaseMessage.includes("pay") || lowerCaseMessage.includes("methods")) {
-      botResponse = "We accept payment through credit cards, PayPal, and bank transfers. You can choose your preferred method at checkout.";
-    } else if (lowerCaseMessage.includes("material") || lowerCaseMessage.includes("fabric")) {
-      botResponse = "Our clothes are made from high-quality cotton, polyester, and blends. Check each product page for specific material details.";
-    } else if (lowerCaseMessage.includes("store") || lowerCaseMessage.includes("location")) {
-      botResponse = "We have stores in multiple locations. Please check our store locator page to find one near you.";
-    } else if (lowerCaseMessage.includes("gift card") || lowerCaseMessage.includes("buy gift card")) {
-      botResponse = "You can purchase gift cards on our website. They make great gifts!";
-    } else if (lowerCaseMessage.includes("customer service") || lowerCaseMessage.includes("support")) {
-      botResponse = "You can reach our customer service via email or our contact page for assistance with any issues.";
-    } else if (lowerCaseMessage.includes("sale") || lowerCaseMessage.includes("discount")) {
-      botResponse = "Check out our Sale section for current discounts and offers!";
-    } else if (lowerCaseMessage.includes("new collection") || lowerCaseMessage.includes("new arrivals")) {
-      botResponse = "Our new collection is live on the website! Feel free to browse through the latest styles.";
+      botResponse = "Sure! Pricing varies by product. You can check the price on the product page, or let me know which item you're interested in, and I’ll help!";
+    } else if (lowerCaseMessage.includes("size") || lowerCaseMessage.includes("sizes") || lowerCaseMessage.includes("fit")) {
+      botResponse = "We offer sizes from XS to XXL. Each product page has a size guide to help you find the perfect fit. Need help with a specific item?";
+    } else if (lowerCaseMessage.includes("shipping") || lowerCaseMessage.includes("delivery") || lowerCaseMessage.includes("how long")) {
+      botResponse = "We ship worldwide! Shipping costs and delivery times depend on your location. For more details, check our shipping info page or let me know your location, and I’ll help!";
+    } else if (lowerCaseMessage.includes("return") || lowerCaseMessage.includes("exchange") || lowerCaseMessage.includes("send back")) {
+      botResponse = "We accept returns within 30 days of purchase, as long as the item is in its original condition. Visit our returns page for instructions, or let me know if you need help with a specific return!";
+    } else if (lowerCaseMessage.includes("payment") || lowerCaseMessage.includes("pay") || lowerCaseMessage.includes("credit card")) {
+      botResponse = "We accept credit cards, PayPal, and bank transfers. You can choose your preferred payment method at checkout. Need help with payment issues?";
+    } else if (lowerCaseMessage.includes("material") || lowerCaseMessage.includes("fabric") || lowerCaseMessage.includes("what’s it made of")) {
+      botResponse = "Our products are made from high-quality materials like cotton, polyester, and blends. Each product page lists the specific materials used. Let me know if you’d like details about a specific item!";
+    } else if (lowerCaseMessage.includes("store") || lowerCaseMessage.includes("location") || lowerCaseMessage.includes("near me")) {
+      botResponse = "We have stores in multiple locations! Use our store locator to find the nearest one, or let me know your city, and I’ll help you find one.";
+    } else if (lowerCaseMessage.includes("gift card") || lowerCaseMessage.includes("buy gift card") || lowerCaseMessage.includes("gift voucher")) {
+      botResponse = "You can purchase gift cards on our website—they’re perfect for any occasion! Let me know if you need help buying or redeeming one.";
+    } else if (lowerCaseMessage.includes("customer service") || lowerCaseMessage.includes("support") || lowerCaseMessage.includes("help")) {
+      botResponse = "Our customer service team is here to help! You can reach us via email or through our contact page. Let me know what you need, and I’ll guide you!";
+    } else if (lowerCaseMessage.includes("sale") || lowerCaseMessage.includes("discount") || lowerCaseMessage.includes("on sale")) {
+      botResponse = "We’ve got some great deals in our Sale section! Check it out for discounts on selected items. Let me know if you’re looking for something specific!";
+    } else if (lowerCaseMessage.includes("new collection") || lowerCaseMessage.includes("new arrivals") || lowerCaseMessage.includes("latest")) {
+      botResponse = "Our new collection is live! Head over to the New Arrivals section to explore the latest styles. Need recommendations? Let me know!";
+    } else if (lowerCaseMessage.includes("track order") || lowerCaseMessage.includes("where is my order")) {
+      botResponse = "You can track your order by logging into your account or using the tracking link in your confirmation email. Need help with your order number?";
+    } else if (lowerCaseMessage.includes("cancel order") || lowerCaseMessage.includes("change order")) {
+      botResponse = "If your order hasn’t been shipped yet, you can cancel or modify it. Let me know your order number, and I’ll assist you!";
+    } else if (lowerCaseMessage.includes("out of stock") || lowerCaseMessage.includes("restock")) {
+      botResponse = "Sorry about that! You can sign up for restock notifications on the product page. Let me know which item you’re interested in, and I’ll check for updates!";
+    } else if (lowerCaseMessage.includes("recommend") || lowerCaseMessage.includes("suggest")) {
+      botResponse = "I’d be happy to help! Let me know what you’re looking for—style, size, or occasion—and I’ll suggest some great options!";
+    } else {
+      botResponse = "I’m here to help! Could you clarify or provide more details about what you’re looking for?";
     }
 
   
