@@ -45,6 +45,7 @@
     "react-is": "^19.0.0",
     "react-redux": "^9.2.0",
     "react-simple-star-rating": "^5.1.7",
+    "react-spinners": "^0.15.0",
     "react-tooltip": "^5.28.0",
     "react-use-intercom": "^5.4.1",
     "redux-persist": "^6.0.0",
