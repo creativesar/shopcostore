@@ -51,7 +51,7 @@ const data: NavMenu = [
     id: 2,
     type: "MenuItem",
     label: "On Sale",
-    url: "/shop/on-sale",
+    url: "/shop#on-sale",
     children: [],
   },
   {
