@@ -16,7 +16,7 @@ const isPublicRoute = createRouteMatcher([
   '/faq(,*)',
   '/freebooks',
   '/twitter',
-  '/instagram'.
+  '/instagram',
   '/facebook',
   '/github(.*)',
 ]);
