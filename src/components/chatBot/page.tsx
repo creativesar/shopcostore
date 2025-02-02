@@ -17,9 +17,41 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, { text: input, sender: "user" }]);
     setIsLoading(true);
 
-    // Simulating a bot response
+   
+    let botResponse = "Thank you for your message! Our team will get back to you soon.";
+
+    const lowerCaseMessage = input.toLowerCase();
+
+    if (lowerCaseMessage.includes("hello") || lowerCaseMessage.includes("hi") || lowerCaseMessage.includes("hey there")) {
+      botResponse = "Hello! How can I assist you today? May I know your name, please?";
+    } else if (lowerCaseMessage.includes("my name is")) {
+      botResponse = `Greetings, ${input.split("is")[1].trim()}! How can I help you today?`;
+    } else if (lowerCaseMessage.includes("price") || lowerCaseMessage.includes("cost") || lowerCaseMessage.includes("how much")) {
+      botResponse = "For pricing information, please visit our products page or contact support for detailed queries.";
+    } else if (lowerCaseMessage.includes("size") || lowerCaseMessage.includes("sizes")) {
+      botResponse = "Our sizes range from XS to XXL. You can find a detailed size chart on each product page.";
+    } else if (lowerCaseMessage.includes("shipping") || lowerCaseMessage.includes("deliver") || lowerCaseMessage.includes("shipping cost")) {
+      botResponse = "We offer worldwide shipping. Visit our shipping info page for more details about shipping costs.";
+    } else if (lowerCaseMessage.includes("return") || lowerCaseMessage.includes("exchange")) {
+      botResponse = "We accept returns within 30 days of purchase in original condition. Please visit our returns page for more info.";
+    } else if (lowerCaseMessage.includes("payment") || lowerCaseMessage.includes("pay") || lowerCaseMessage.includes("methods")) {
+      botResponse = "We accept payment through credit cards, PayPal, and bank transfers. You can choose your preferred method at checkout.";
+    } else if (lowerCaseMessage.includes("material") || lowerCaseMessage.includes("fabric")) {
+      botResponse = "Our clothes are made from high-quality cotton, polyester, and blends. Check each product page for specific material details.";
+    } else if (lowerCaseMessage.includes("store") || lowerCaseMessage.includes("location")) {
+      botResponse = "We have stores in multiple locations. Please check our store locator page to find one near you.";
+    } else if (lowerCaseMessage.includes("gift card") || lowerCaseMessage.includes("buy gift card")) {
+      botResponse = "You can purchase gift cards on our website. They make great gifts!";
+    } else if (lowerCaseMessage.includes("customer service") || lowerCaseMessage.includes("support")) {
+      botResponse = "You can reach our customer service via email or our contact page for assistance with any issues.";
+    } else if (lowerCaseMessage.includes("sale") || lowerCaseMessage.includes("discount")) {
+      botResponse = "Check out our Sale section for current discounts and offers!";
+    } else if (lowerCaseMessage.includes("new collection") || lowerCaseMessage.includes("new arrivals")) {
+      botResponse = "Our new collection is live on the website! Feel free to browse through the latest styles.";
+    }
+
+  
     setTimeout(() => {
-      const botResponse = "Thank you for your message! Our team will get back to you soon."; // You can customize this logic
       setMessages((prev) => [
         ...prev,
         { text: botResponse, sender: "bot" },
