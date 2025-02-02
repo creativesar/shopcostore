@@ -10,19 +10,13 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
 
+// Predefined color options
 const colorsData: Color[] = [
-  {
-    name: "Brown",
-    code: "bg-[#4F4631]",
-  },
-  {
-    name: "Green",
-    code: "bg-[#314F4A]",
-  },
-  {
-    name: "Blue",
-    code: "bg-[#31344F]",
-  },
+  { name: "Blue", code: "bg-blue-500" },
+  { name: "White", code: "bg-white shadow-md" }, 
+  { name: "Black", code: "bg-black" },
+  { name: "Red", code: "bg-red-500" },
+  { name: "Yellow", code: "bg-yellow-500" },
 ];
 
 const ColorSelection = () => {
@@ -48,7 +42,7 @@ const ColorSelection = () => {
             onClick={() => dispatch(setColorSelection(color))}
           >
             {colorSelection.name === color.name && (
-              <IoMdCheckmark className="text-base text-white" />
+              <IoMdCheckmark className="text-base text-orange-500" />
             )}
           </button>
         ))}
