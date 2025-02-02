@@ -11,36 +11,23 @@ const Chatbot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (!input.trim()) return;
 
     setMessages((prev) => [...prev, { text: input, sender: "user" }]);
     setIsLoading(true);
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: input }),
-      });
-
-      const data = await response.json();
+    // Simulating a bot response
+    setTimeout(() => {
+      const botResponse = "Thank you for your message! Our team will get back to you soon."; // You can customize this logic
       setMessages((prev) => [
         ...prev,
-        { text: data.reply, sender: "bot" },
+        { text: botResponse, sender: "bot" },
       ]);
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setMessages((prev) => [
-        ...prev,
-        { text: "Sorry, something went wrong. Please try again later.", sender: "bot" },
-      ]);
-    }
+      setIsLoading(false);
+    }, 1000);
 
     setInput("");
-    setIsLoading(false);
   };
 
   return (
