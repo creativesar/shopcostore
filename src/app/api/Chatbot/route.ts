@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Only POST requests allowed" });
   }
@@ -29,11 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (lowerCaseMessage.includes("material")) {
     botResponse = "Our clothes are made from high-quality cotton, polyester, and blends. Check each product page for details.";
   } else if (lowerCaseMessage.includes("gift card")) {
-    botResponse = "Yes, we offer gift cards that can be purchased directly from our website.";
+    botResponse = "You can purchase gift cards on our website. They make great gifts!";
   }
 
-  // Log the bot's response
-  console.log("Bot Response:", botResponse);
-
-  return res.status(200).json({ reply: botResponse });
+  res.status(200).json({ response: botResponse });
 }
+
+export default handler;
