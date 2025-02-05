@@ -12,3 +12,37 @@ export interface Product {
     _id: string; // Unique identifier for the product
   }
   
+  export interface BillingDetails {
+    fullName: string;
+    phoneNumber: string;
+    email: string;
+    addressLine1: string;
+    addressLine2?: string; 
+    city: string;
+    zipcode: string;
+    country: string;
+  }
+  
+  
+  
+  export interface ProductDetail {
+    name: string;
+    imageUrl: string;
+    Finalprice: number;
+    Quantity: number;
+  }
+  
+  export interface Billing{
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+  }
+  
+  export interface Order {
+    customerDetails: Billing;
+    cartItems: ProductDetail[];
+    totalAmount: number;
+  }
