@@ -21,11 +21,46 @@ const isPublicRoute = createRouteMatcher([
   '/github(.*)',
 ]);
 
+
+
 export default clerkMiddleware(async (auth, request) => {
-  // If the route is not public, protect it
+  const url = new URL(request.url);
+
   if (!isPublicRoute(request)) {
     await auth.protect();
   }
+
+  // Custom logic to ensure `billing-summary` is accessed only via `cart` page
+  if (url.pathname === '/summary') {
+    const referrer = request.headers.get('referer');
+    if (!referrer || !referrer.includes('/cart')) {
+      // Redirect to cart page if not coming from there
+      return Response.redirect(new URL('/cart', request.url));
+    }
+  }
+  // Custom logic to ensure `ordersuccess` is accessed only via `billing-summary` page
+  if (url.pathname === '/success') {
+    const referrer = request.headers.get('referer');
+  
+    if (!referrer) {
+      // Redirect to carts page if no referrer is available
+      return Response.redirect(new URL('/cart', request.url));
+    }
+  
+    // Check if the referrer is either from billing-summary or stripe.com
+    if (!referrer.includes('/summary') && !referrer.includes('stripe.com')) {
+      return Response.redirect(new URL('/cart', request.url));
+    }
+  }
+  
+  if (url.pathname === '/cancel' ) {
+    const referrer = request.headers.get('referer');
+    if (!referrer || !referrer.includes('stripe.com')) {
+      // Redirect to billing-summary  page if not coming from there
+      return Response.redirect(new URL('/', request.url));
+    }
+  }
+
 });
 
 export const config = {
@@ -36,3 +71,5 @@ export const config = {
     '/(api|trpc)(.*)',
   ],
 };
+
+// ab dhekho

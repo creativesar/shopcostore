@@ -1,100 +1,127 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useAppSelector } from "@/lib/hooks/redux";
+import BreadcrumbCart from "@/components/cart-page/BreadcrumbCart";
+import ProductCard from "@/components/cart-page/ProductCard";
+import { Button } from "@/components/ui/button";
+import InputGroup from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
+import { integralCF } from "@/styles/fonts";
+import { FaArrowRight } from "react-icons/fa6";
+import { MdOutlineLocalOffer } from "react-icons/md";
+import { TbBasketExclamation } from "react-icons/tb";
+import React from "react";
 import { RootState } from "@/lib/store";
-gsap.registerPlugin(ScrollTrigger);
+import { useAppSelector } from "@/lib/hooks/redux";
+import Link from "next/link";
 
-const PaymentSuccess = () => {
-  const router = useRouter();
-  const { totalPrice, adjustedTotalPrice } = useAppSelector(
+export default function CartPage() {
+  const { cart, totalPrice, adjustedTotalPrice } = useAppSelector(
     (state: RootState) => state.carts
   );
-  const containerRef = useRef(null);
-  const textRef = useRef(null);
-
-  useEffect(() => {
-    const audio = new Audio("/studio/payment-success.mp3");
-    audio.play();
-
-    gsap.fromTo(
-      containerRef.current,
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 1, ease: "power3.out" }
-    );
-
-    gsap.fromTo(
-      textRef.current,
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.5 }
-    );
-  }, []);
-
-  const handleContinueShopping = () => {
-    gsap.to(containerRef.current, {
-      opacity: 0,
-      scale: 0.8,
-      duration: 0.5,
-      ease: "power3.in",
-      onComplete: () => router.push("/"),
-    });
-  };
 
   return (
-    <div
-      ref={containerRef}
-      className="flex items-center justify-center min-h-screen bg-white"
-    >
-      <div
-        className="w-full max-w-md p-10 bg-white rounded-3xl shadow-2xl flex flex-col items-center border border-gray-200 relative overflow-hidden"
-      >
-        {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-teal-500 opacity-20 blur-3xl" />
-        
-        {/* Success Icon */}
-        <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-400 to-teal-500 rounded-full shadow-xl relative z-10">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-8 h-8 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-
-        {/* Success Message */}
-        <h1
-          ref={textRef}
-          className="mt-6 text-3xl text-center font-bold text-gray-800 relative z-10"
-        >
-          Payment Successful!
-        </h1>
-
-        <p className="mt-4 text-center text-gray-700 text-lg relative z-10">
-          Thank you for your purchase! Your order has been confirmed.
-        </p>
-
-        {/* Display Amount */}
-        <p className="mt-2 text-center text-gray-900 text-xl font-bold relative z-10">
-          Amount Paid: ${adjustedTotalPrice || totalPrice}
-        </p>
-
-        {/* Continue Shopping Button */}
-        <button
-          className="mt-6 px-6 py-3 text-white bg-black rounded-lg shadow-xl transition-all hover:bg-gray-800 duration-300 transform hover:scale-105 relative z-10"
-          onClick={handleContinueShopping}
-        >
-          Continue Shopping
-        </button>
+    <main className="pb-20">
+      <div className="max-w-frame mx-auto px-4 xl:px-0">
+        {cart && cart.items.length > 0 ? (
+          <>
+            <BreadcrumbCart />
+            <h2
+              className={cn([
+                integralCF.className,
+                "font-bold text-[32px] md:text-[40px] text-black uppercase mb-5 md:mb-6",
+              ])}
+            >
+              your cart
+            </h2>
+            <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 items-start">
+              <div className="w-full p-3.5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
+                {cart?.items.map((product, idx, arr) => (
+                  <React.Fragment key={idx}>
+                    <ProductCard data={product} />
+                    {arr.length - 1 !== idx && (
+                      <hr className="border-t-black/10" />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+              <div className="w-full lg:max-w-[505px] p-5 md:px-6 flex-col space-y-4 md:space-y-6 rounded-[20px] border border-black/10">
+                <h6 className="text-xl md:text-2xl font-bold text-black">
+                  Order Summary
+                </h6>
+                <div className="flex flex-col space-y-5">
+                  <div className="flex items-center justify-between">
+                    <span className="md:text-xl text-black/60">Subtotal</span>
+                    <span className="md:text-xl font-bold">${totalPrice}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="md:text-xl text-black/60">
+                      Discount (-
+                      {Math.round(
+                        ((totalPrice - adjustedTotalPrice) / totalPrice) * 100
+                      )}
+                      %)
+                    </span>
+                    <span className="md:text-xl font-bold text-red-600">
+                      -${Math.round(totalPrice - adjustedTotalPrice)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="md:text-xl text-black/60">
+                      Delivery Fee
+                    </span>
+                    <span className="md:text-xl font-bold">Free</span>
+                  </div>
+                  <hr className="border-t-black/10" />
+                  <div className="flex items-center justify-between">
+                    <span className="md:text-xl text-black">Total</span>
+                    <span className="text-xl md:text-2xl font-bold">
+                      ${Math.round(adjustedTotalPrice)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex space-x-3">
+                  <InputGroup className="bg-[#F0F0F0]">
+                    <InputGroup.Text>
+                      <MdOutlineLocalOffer className="text-black/40 text-2xl" />
+                    </InputGroup.Text>
+                    <InputGroup.Input
+                      type="text"
+                      name="code"
+                      placeholder="Add promo code"
+                      className="bg-transparent placeholder:text-black/40"
+                    />
+                  </InputGroup>
+                  <Button
+                    type="button"
+                    className="bg-black rounded-full w-full max-w-[119px] h-[48px]"
+                  >
+                    Apply
+                  </Button>
+                </div>
+                <Button
+  type="button"
+  className="text-sm md:text-base font-medium bg-black rounded-full w-full py-4 h-[54px] md:h-[60px] group"
+  asChild
+>
+  <Link href="/summary">
+    Go to Checkout{" "}
+    <FaArrowRight className="text-xl ml-2 group-hover:translate-x-1 transition-all" />
+  </Link>
+</Button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center flex-col text-gray-300 mt-32">
+            <TbBasketExclamation strokeWidth={1} className="text-6xl" />
+            <span className="block mb-4">Your shopping cart is empty.</span>
+            <Button className="rounded-full w-24" asChild>
+              <Link href="/shop">Shop</Link>
+            </Button>
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
-};
-
-export default PaymentSuccess;
+}
+//ek kam karen isko band kar k open kartay hain then hojay
