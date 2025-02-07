@@ -33,7 +33,7 @@ export default function SuccessPage() {
         )}
         <p className="text-gray-600 mt-3 text-lg">Thank you for your purchase. Your payment has been processed successfully.</p>
         <div ref={buttonRef} className="mt-8">
-          <Link href="/" className="px-8 py-3 bg-black hover:bg-gray-800 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-green-600 transition-transform transform hover:scale-105">
+          <Link href="/" className="px-8 py-3 bg-black  text-white rounded-full shadow-lg text-lg font-semibold hover:bg-gray-800 transition-transform transform hover:scale-105">
             Continue Shopping
           </Link>
         </div>
