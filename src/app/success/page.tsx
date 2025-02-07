@@ -26,7 +26,7 @@ export default function SuccessPage() {
         className="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-md w-full border border-gray-200"
       >
         <div ref={iconRef} className="flex justify-center mb-6">
-          <CheckCircleIcon className="text-green-500 w-20 h-20 drop-shadow-lg" />
+          <CheckCircleIcon className="text-black w-20 h-20 drop-shadow-lg" />
         </div>
         <h1 className="text-3xl font-extrabold text-gray-800">
           Payment Successful!
@@ -36,7 +36,7 @@ export default function SuccessPage() {
           <p className="text-gray-700 mt-2 text-lg font-semibold">Total Paid: ${totalPrice}</p>
         )}
         <div ref={buttonRef} className="mt-8">
-          <Link href="/" className="px-8 py-3 bg-green-500 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-green-600 transition-transform transform hover:scale-105">
+          <Link href="/" className="px-8 py-3 bg-black hover:bg-gray-800 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-green-600 transition-transform transform hover:scale-105">
             Continue Shopping
           </Link>
         </div>
