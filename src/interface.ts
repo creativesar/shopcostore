@@ -1,4 +1,9 @@
+import { atom } from "jotai";
+import { DetailPreview } from "sanity";
+import { atomWithStorage } from "jotai/utils";
+
 export interface Product {
+    quantity: any;
     name: string; 
     category: 'tshirt' | 'short' | 'jeans' | 'hoodie' | 'shirt';
     description: string; // Product description
@@ -12,16 +17,16 @@ export interface Product {
     _id: string; // Unique identifier for the product
   }
   
-  export interface BillingDetails {
-    fullName: string;
-    phoneNumber: string;
-    email: string;
-    addressLine1: string;
-    addressLine2?: string; 
-    city: string;
-    zipcode: string;
-    country: string;
-  }
+  // export interface BillingDetails {
+  //   fullName: string;
+  //   phoneNumber: string;
+  //   email: string;
+  //   addressLine1: string;
+  //   addressLine2?: string; 
+  //   city: string;
+  //   zipcode: string;
+  //   country: string;
+  // }
   
   
   
@@ -46,3 +51,21 @@ export interface Product {
     cartItems: ProductDetail[];
     totalAmount: number;
   }
+
+
+
+ const initialBillingDetails: Billing = {
+    fullName: "",
+    phoneNumber: "",
+    email: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+ 
+  }
+
+export const customerFormDetails = atom<Billing>(initialBillingDetails);
+
+
+
+
