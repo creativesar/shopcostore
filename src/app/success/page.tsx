@@ -1,11 +1,8 @@
-'use client';
-
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { CheckCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useAppSelector } from '@/lib/hooks/redux';
-
 
 export default function SuccessPage() {
   const { totalPrice } = useAppSelector((state) => state.carts);
@@ -31,10 +28,10 @@ export default function SuccessPage() {
         <h1 className="text-3xl font-extrabold text-gray-800">
           Payment Successful!
         </h1>
-        <p className="text-gray-600 mt-3 text-lg">Thank you for your purchase. Your payment has been processed successfully.</p>
         {totalPrice && (
-          <p className="text-gray-700 mt-2 text-lg font-semibold">Total Paid: ${totalPrice}</p>
+          <p className="text-2xl font-bold text-green-600 mt-3">Total Paid: ${totalPrice}</p>
         )}
+        <p className="text-gray-600 mt-3 text-lg">Thank you for your purchase. Your payment has been processed successfully.</p>
         <div ref={buttonRef} className="mt-8">
           <Link href="/" className="px-8 py-3 bg-black hover:bg-gray-800 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-green-600 transition-transform transform hover:scale-105">
             Continue Shopping
