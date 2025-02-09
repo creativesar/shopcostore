@@ -6,7 +6,8 @@ import Reviews from "@/components/homepage/Reviews/page";
 import { Product } from "../interface";
 import { Review } from "@/types/review.types";
 import { client } from "@/sanity/lib/client";
-import Chatbot from "@/components/chatBot/page";
+import AIAgent from "@/components/AIChatBot/page";
+
 
 async function getProducts(start: number, end: number) {
   const query = `*[_type == "products"] | order(_createdAt desc) [${start}...${end}] {
@@ -110,7 +111,7 @@ export default async function Home() {
           <DressStyle />
         </div>
         <Reviews data={reviewsData} />
-        <Chatbot />
+        <AIAgent />
       </main>
     </>
   );
