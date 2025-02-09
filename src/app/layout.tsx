@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer/page";
 import HolyLoader from "holy-loader";
 import Providers from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 
 export const metadata: Metadata = {
@@ -30,11 +31,13 @@ export default function RootLayout({
     <html lang="en">
       
         <body className={satoshi.className}>
+          
           <HolyLoader color="#868686" />
           <TopBanner />
           <Providers>
             <TopNavbar /> 
             {children}
+            <SpeedInsights />
           </Providers>
           <Footer />
         </body>
