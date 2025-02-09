@@ -158,7 +158,8 @@ const products = [
         colors: ["Green"],
         description: "Sporty green bomber jacket with snap buttons and ribbed cuffs.",
         sizes: ["Small", "Medium", "Large", "Extra Large"]
-      }
+      },
+  
 ];
 
 interface Message {
@@ -191,11 +192,17 @@ export default function AIAgent() {
   useEffect(() => {
     sendSound.load();
     receiveSound.load();
-    return () => window.speechSynthesis.cancel();
+    return () => {
+      window.speechSynthesis.cancel();
+      sendSound.pause();
+      receiveSound.pause();
+    };
   }, []);
 
   useEffect(() => {
-    if (messages.length === 1) speak(messages[0].text);
+    if (typeof window !== 'undefined' && window.innerWidth > 768) {
+      speak("Welcome to ShopCo! 🛍️ How can I assist you today?");
+    }
   }, []);
 
   useEffect(() => {
@@ -215,7 +222,7 @@ export default function AIAgent() {
     sound.play().catch(error => console.log("Audio play failed:", error));
   };
 
-    const handleSend = async () => {
+  const handleSend = async () => {
     if (!input.trim() || isBotTyping) return;
 
     if (inputRef.current) {
@@ -240,29 +247,33 @@ export default function AIAgent() {
     setIsBotTyping(false);
     setButtonGlow(true);
     setTimeout(() => setButtonGlow(false), 2000);
-};
+  };
 
   const speak = (text: string): void => {
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    speech.rate = 1.1;
-    
-    speech.onstart = () => {
-      anime({
-        targets: '.bot-message:last-child',
-        scale: [1, 1.02],
-        duration: 500,
-        easing: 'easeInOutQuad',
-        loop: true
-      });
-    };
-    
-    speech.onend = () => {
-      anime.remove('.bot-message:last-child');
-    };
-    
-    window.speechSynthesis.speak(speech);
+    try {
+      window.speechSynthesis.cancel();
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = "en-US";
+      speech.rate = 1.1;
+      
+      speech.onstart = () => {
+        anime({
+          targets: '.bot-message:last-child',
+          scale: [1, 1.02],
+          duration: 500,
+          easing: 'easeInOutQuad',
+          loop: true
+        });
+      };
+      
+      speech.onend = () => {
+        anime.remove('.bot-message:last-child');
+      };
+      
+      window.speechSynthesis.speak(speech);
+    } catch (error) {
+      console.error('Speech synthesis error:', error);
+    }
   };
 
   const ParticleEffect = () => (
@@ -348,14 +359,18 @@ export default function AIAgent() {
 • Contact support`;
   };
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault();
+  };
+
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-5 right-5 z-50 sm:bottom-8 sm:right-8">
       <motion.button
         onClick={() => {
           setIsOpen(!isOpen);
           inputRef.current?.focus();
         }}
-        className="relative bg-gradient-to-br from-purple-600 to-blue-500 text-white p-5 rounded-full shadow-2xl hover:shadow-xl transition-all"
+        className="relative bg-gradient-to-br from-purple-600 to-blue-500 text-white p-4 sm:p-5 rounded-full shadow-2xl hover:shadow-xl transition-all"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         whileHover={{ rotate: 12, scale: 1.1 }}
@@ -394,7 +409,8 @@ export default function AIAgent() {
               transition: { type: 'spring', bounce: 0.4 }
             }}
             exit={{ opacity: 0, scale: 0.8, rotate: 5 }}
-            className="w-96 bg-white/90 backdrop-blur-lg rounded-xl shadow-2xl border border-gray-200 relative overflow-hidden"
+            className="w-full max-w-[95vw] sm:max-w-md bg-white/90 backdrop-blur-lg rounded-xl shadow-2xl border border-gray-200 relative overflow-hidden"
+            onTouchMove={handleTouchMove}
           >
             {particlePos && <ParticleEffect />}
             
@@ -476,7 +492,7 @@ export default function AIAgent() {
                 </div>
               </div>
 
-              <div className="h-96 overflow-y-auto space-y-3 pr-2">
+              <div className="h-[50vh] sm:h-96 overflow-y-auto space-y-3 pr-2">
                 <AnimatePresence>
                   {messages.map((msg, index) => (
                     <motion.div
@@ -602,14 +618,17 @@ export default function AIAgent() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Ask about products..."
-                  className="w-full p-3 pr-12 rounded-xl border border-gray-200 bg-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
+                  className="w-full p-3 pr-12 rounded-xl border border-gray-200 bg-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm text-sm sm:text-base"
                   disabled={isBotTyping}
                   whileFocus={{ scale: 1.02 }}
+                  inputMode="text"
+                  enterKeyHint="send"
                 />
                 <Button
                   onClick={handleSend}
                   disabled={isBotTyping}
-                  className="absolute right-2 top-2 p-2 rounded-lg"
+                  className="absolute right-2 top-2 p-2 rounded-lg touch-manipulation"
+                  aria-label="Send message"
                 >
                   <motion.div
                     className="bg-gradient-to-br from-purple-500 to-blue-500 p-2 rounded-lg"
