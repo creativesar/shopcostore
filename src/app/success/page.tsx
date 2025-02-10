@@ -7,7 +7,6 @@ import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import { useAppSelector } from '@/lib/hooks/redux';
 
-// Custom floating animation configuration
 const createFloatingAnimation = (element: HTMLElement) => {
   const tl = gsap.timeline({ repeat: -1, yoyo: true });
   tl.to(element, {
@@ -21,19 +20,17 @@ const createFloatingAnimation = (element: HTMLElement) => {
 
 export default function SuccessPage() {
   const { totalPrice } = useAppSelector((state) => state.carts);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const floatingAnimations = useRef<gsap.core.Timeline[]>([]);
 
-  // Dynamic confetti colors
   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
 
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
     
-    // Master animation timeline
     tl.fromTo(containerRef.current, 
       { opacity: 0, scale: 0.9 },
       { opacity: 1, scale: 1, duration: 1.2, ease: 'elastic.out(1, 0.3)' }
@@ -46,7 +43,6 @@ export default function SuccessPage() {
         duration: 1.5,
         ease: 'elastic.out(1, 0.5)',
         onComplete: () => {
-          // Start floating animation
           if (iconRef.current) {
             floatingAnimations.current.push(createFloatingAnimation(iconRef.current));
           }
@@ -65,7 +61,6 @@ export default function SuccessPage() {
       '<0.3'
     );
 
-    // Confetti burst function
     const burst = (count: number, particleRatio: number, opts: any) => {
       confetti({
         ...opts,
@@ -77,7 +72,6 @@ export default function SuccessPage() {
       });
     };
 
-    // Create multiple confetti bursts
     Array.from({ length: 5 }).forEach((_, i) => {
       setTimeout(() => {
         burst(200, 0.25, { spread: 55 * i, origin: { y: 0.7 } });
@@ -86,9 +80,7 @@ export default function SuccessPage() {
       }, i * 150);
     });
 
-    // Ambient particles animation
-    const particles = Array.from({ length: 30 });
-    particles.forEach((_, i) => {
+    Array.from({ length: 30 }).forEach((_, i) => {
       gsap.to(`.particle-${i}`, {
         duration: 2 + Math.random() * 3,
         x: 'random(-100, 100)',
@@ -100,24 +92,19 @@ export default function SuccessPage() {
       });
     });
 
-    // Sound effect
     const successSound = new Audio('/success.mp3');
     successSound.volume = 0.3;
-    const playPromise = successSound.play();
-    playPromise.catch(() => {});
+    successSound.play().catch(() => {});
 
     return () => {
-      // Cleanup animations
       gsap.killTweensOf('*');
       floatingAnimations.current.forEach(anim => anim.kill());
       successSound.pause();
     };
   }, []);
 
-  // Rest of the component remains the same...
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-blue-800 to-purple-900 overflow-hidden">
-      {/* Animated background particles */}
       {Array.from({ length: 30 }).map((_, i) => (
         <div
           key={i}
@@ -135,7 +122,6 @@ export default function SuccessPage() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Hover effect glow */}
         <div className={`absolute inset-0 rounded-[40px] transition-all duration-500 ${
           isHovered ? 'shadow-glow opacity-100' : 'opacity-0'
         }`} />
@@ -145,7 +131,52 @@ export default function SuccessPage() {
           <div className="absolute inset-0 border-4 border-emerald-400/30 rounded-full animate-ping-slow" />
         </div>
 
-        {/* ... rest of the JSX remains unchanged ... */}
+        <h1 className="success-text text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+          Payment Complete!
+        </h1>
+
+        {totalPrice && (
+          <div className="success-text relative inline-block">
+            <p className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-blue-600">
+              ${totalPrice}
+            </p>
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-blue-500/20 blur-xl" />
+          </div>
+        )}
+
+        <p className="success-text text-xl text-gray-700 mt-6 leading-relaxed">
+          Your order is being processed. You'll receive a confirmation email shortly.
+        </p>
+
+        <div ref={buttonRef} className="mt-10 relative group">
+          <Link 
+            href="/"
+            className="px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl shadow-2xl text-xl font-bold transform transition-all duration-300 
+                      hover:scale-105 hover:shadow-3xl active:scale-95 group-hover:bg-gradient-to-l"
+          >
+            <span className="relative z-10">Continue Shopping</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
+          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-8 bg-purple-600/30 blur-2xl group-hover:blur-xl transition-all" />
+        </div>
+
+        <div className="absolute -top-8 -right-8 w-24 h-24 bg-purple-500/20 rounded-full blur-xl" />
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-blue-500/20 rounded-full blur-xl" />
+      </div>
+
+      <div className="absolute pointer-events-none">
+        {['🚀', '🎉', '💰', '🌟', '💎'].map((emoji, i) => (
+          <div
+            key={i}
+            className="absolute text-4xl opacity-0 animate-float"
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.5}s`
+            }}
+          >
+            {emoji}
+          </div>
+        ))}
       </div>
     </div>
   );
