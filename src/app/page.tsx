@@ -9,6 +9,7 @@ import { client } from "@/sanity/lib/client";
 import AIAgent from "@/components/AIChatBot/page";
 
 
+
 async function getProducts(start: number, end: number) {
   const query = `*[_type == "products"] | order(_createdAt desc) [${start}...${end}] {
     _id,
@@ -112,6 +113,7 @@ export default async function Home() {
         </div>
         <Reviews data={reviewsData} />
         <AIAgent />
+        
       </main>
     </>
   );

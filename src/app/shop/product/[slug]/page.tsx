@@ -12,7 +12,7 @@ export default async function ProductPage({ params }: any) {
     sizes, price, name, category, description,
     "image": image.asset->url,
     "id": _id,
-    colors, isNew
+    colors, isNew,discountPercent
   }`;
 
   const productData: Product = await client.fetch(productQuery);

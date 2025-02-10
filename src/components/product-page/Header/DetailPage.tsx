@@ -39,43 +39,29 @@ const DetailPage = ({ ProductDetail }:{ ProductDetail: Product }) => {
             </span>
           </div>
           <div className="flex items-center space-x-2.5 sm:space-x-3 mb-5">
-            {ProductDetail.discountPercent > 0 ? (
-              <span className="font-bold text-black text-2xl sm:text-[32px]">
-                {`$${Math.round(
-                  ProductDetail.price - ( ProductDetail.price *  ProductDetail.discountPercent) / 100
-                )}`}
-              </span>
-            ) : ProductDetail.discountPercent > 0 ? (
-              <span className="font-bold text-black text-2xl sm:text-[32px]">
-                {`$${ProductDetail.price - ProductDetail.discountPercent}`}
-              </span>
-            ) : (
-              <span className="font-bold text-black text-2xl sm:text-[32px]">
-                ${ProductDetail.price}
-              </span>
-            )}
-            {ProductDetail.discountPercent > 0 && (
-              <span className="font-bold text-black/40 line-through text-2xl sm:text-[32px]">
-                ${ProductDetail.price}
-              </span>
-            )}
-            {ProductDetail.discountPercent> 0 && (
-              <span className="font-bold text-black/40 line-through text-2xl sm:text-[32px]">
-                ${ProductDetail.price}
-              </span>
-            )}
-            {ProductDetail.discountPercent > 0 ? (
-              <span className="font-medium text-[10px] sm:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-                {`-${ProductDetail.price}%`}
-              </span>
-            ) : (
-              ProductDetail.discountPercent > 0 && (
-                <span className="font-medium text-[10px] sm:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
-                  {`-$${ProductDetail.price}`}
-                </span>
-              )
-            )}
-          </div>
+  {ProductDetail.discountPercent > 0 ? (
+    <span className="font-bold text-black text-2xl sm:text-[32px]">
+      {`$${Math.round(ProductDetail.price - (ProductDetail.price * ProductDetail.discountPercent) / 100)}`}
+    </span>
+  ) : (
+    <span className="font-bold text-black text-2xl sm:text-[32px]">
+      ${ProductDetail.price}
+    </span>
+  )}
+
+  {ProductDetail.discountPercent > 0 && (
+    <span className="font-bold text-black/40 line-through text-2xl sm:text-[32px]">
+      ${ProductDetail.price}
+    </span>
+  )}
+
+  {ProductDetail.discountPercent > 0 && (
+    <span className="font-medium text-[10px] sm:text-xs py-1.5 px-3.5 rounded-full bg-[#FF3333]/10 text-[#FF3333]">
+      {`-${ProductDetail.discountPercent}%`}
+    </span>
+  )}
+</div>
+
           <p className="text-sm sm:text-base text-black/60 mb-5">
             {ProductDetail.description}
           </p>
