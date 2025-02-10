@@ -178,14 +178,14 @@ interface Product {
 }
 
 export default function AIAgent() {
-  const [messages, setMessages] = useState<Message[]>([
-    { text: "Welcome to ShopCo! 🛍️ How can I assist you today?", from: "bot" }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [buttonGlow, setButtonGlow] = useState(false);
   const [particlePos, setParticlePos] = useState<{x: number, y: number} | null>(null);
+  const [userName, setUserName] = useState("");
+  const [conversationStep, setConversationStep] = useState<'greeting' | 'askName' | 'normal'>('greeting');
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -200,10 +200,15 @@ export default function AIAgent() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth > 768) {
-      speak("Welcome to ShopCo! 🛍️ How can I assist you today?");
+    if (isOpen && messages.length === 0) {
+      const initialGreeting: Message = { 
+        text: "Hello! Welcome to ShopCo! 🛍️ How are you doing today?", 
+        from: "bot" 
+      };
+      setMessages([initialGreeting]);
+      speak(initialGreeting.text);
     }
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -238,10 +243,21 @@ export default function AIAgent() {
     setIsBotTyping(true);
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    const botResponse = getBotResponse(input);
-    const botMessage: Message = { text: botResponse, from: "bot" };
-  
+    let botResponse = "";
+    if (conversationStep === 'greeting') {
+      botResponse = "That's wonderful! May I know your good name please?";
+      setConversationStep('askName');
+    } else if (conversationStep === 'askName') {
+      const name = input.trim();
+      setUserName(name);
+      botResponse = `Nice to meet you, ${name}! ✨ How can I assist you today?`;
+      setConversationStep('normal');
+    } else {
+      botResponse = getBotResponse(input);
+    }
+
     playSound(receiveSound);
+    const botMessage: Message = { text: botResponse, from: "bot" };
     setMessages(prev => [...prev, botMessage]);
     speak(botResponse);
     setIsBotTyping(false);
@@ -323,10 +339,10 @@ export default function AIAgent() {
     }
 
     if (/(?:price|cost) range|how expensive/.test(query)) 
-      return "💰 Our products range from $62.40 to $300! Ask about specific items.";
+      return `${userName ? `${userName}, o` : "O"}ur products range from $62.40 to $300! Ask about specific items.`;
 
     if (/shipping|delivery|ship time/.test(query)) 
-      return "🚚 FREE shipping on orders over $50! 3-5 business days delivery.";
+      return `${userName ? `${userName}, we offer ` : "We offer "}FREE shipping on orders over $50! 3-5 business days delivery.`;
 
     if (/discount|sale|offer|promotion/.test(query)) 
       return "🎉 Discounted items:\n- Loose Fit Bermuda Shorts\n- Sleeve Stripe T-Shirt\n- Vertical Striped Shirt";
@@ -340,24 +356,28 @@ export default function AIAgent() {
     if (/contact support|talk to someone|customer service|help line/i.test(query))
       return "📞 Contact Us:\n• 24/7 Support\n• Call: 1-800-SHOPCO\n• Email: support@shopco.com\n• Live Chat available on website";
 
-    if (/color|colour|available hues/.test(query)) 
-      return "🌈 Specify an item to see its color options!";
-
-    if (/size|sizing|fit/.test(query)) 
-      return "📐 Sizes: Small to XL. Some items have numbered sizes. Ask about specific products!";
+    if (/thank|thanks|appreciate/i.test(query))
+      return `😊 You're welcome${userName ? `, ${userName}` : ""}! How else can I assist you?`;
 
     if (/recommend|suggest|what's good/.test(query))
-      return "🌟 Popular picks:\n1. Classic Polo T-Shirt\n2. Green Bomber Jacket\n3. Gradient Graphic T-shirt";
+      return `${userName ? `${userName}, here are our popular picks:` : "Popular picks:"}\n1. Classic Polo T-Shirt\n2. Green Bomber Jacket\n3. Gradient Graphic T-shirt`;
 
-    return `🤖 Ask about:
+    return `${userName ? `${userName}, a` : "A"}sk about:
 • Product details
 • Prices & discounts
 • Colors & sizes
 • Shipping info
 • Return policy
-• Payment methods
-• Contact support`;
-  };
+• Payment methods`;
+
+
+  };  useEffect(() => {
+    if (!isOpen) {
+      setMessages([]);
+      setUserName("");
+      setConversationStep('greeting');
+    }
+  }, [isOpen]);
 
   const handleTouchMove = (e: React.TouchEvent) => {
     e.preventDefault();
@@ -617,7 +637,7 @@ export default function AIAgent() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Ask about products..."
+                  placeholder="Type your message..."
                   className="w-full p-3 pr-12 rounded-xl border border-gray-200 bg-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm text-sm sm:text-base"
                   disabled={isBotTyping}
                   whileFocus={{ scale: 1.02 }}
