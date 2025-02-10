@@ -208,7 +208,8 @@ export default function AIAgent() {
       setMessages([initialGreeting]);
       speak(initialGreeting.text);
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length]);
+  
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
