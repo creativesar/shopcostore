@@ -145,7 +145,7 @@ export default function SuccessPage() {
         )}
 
         <p className="success-text text-xl text-gray-700 mt-6 leading-relaxed">
-          Your order is being processed. You'll receive a confirmation email shortly.
+          Your order is being processed. You will receive a confirmation email shortly.
         </p>
 
         <div ref={buttonRef} className="mt-10 relative group">
