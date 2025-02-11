@@ -186,12 +186,27 @@ export default function AIAgent() {
   const [particlePos, setParticlePos] = useState<{x: number, y: number} | null>(null);
   const [userName, setUserName] = useState("");
   const [conversationStep, setConversationStep] = useState<'greeting' | 'askName' | 'normal'>('greeting');
+  const [hasGreeted, setHasGreeted] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const greetings = [
+    "Welcome to ShopCo! \nHello there! We're excited to help you find perfect style. How can we assist you today?",
+    "Hi there! Welcome to ShopCo!\nYour fashion journey starts here! What can we do for you? ",
+    "Hello fashionista! \nReady to explore the latest trends at ShopCo? Let's get started! "
+  ];
 
   useEffect(() => {
     sendSound.load();
     receiveSound.load();
+    
+    const firstVisit = !sessionStorage.getItem('hasVisited');
+    if (firstVisit) {
+      sessionStorage.setItem('hasVisited', 'true');
+      setButtonGlow(true);
+      setTimeout(() => setButtonGlow(false), 5000);
+    }
+
     return () => {
       window.speechSynthesis.cancel();
       sendSound.pause();
@@ -200,16 +215,27 @@ export default function AIAgent() {
   }, []);
 
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
+    if (isOpen && messages.length === 0 && !hasGreeted) {
       const initialGreeting: Message = { 
-        text: "Hello! Welcome to ShopCo! 🛍️ How are you doing today?", 
+        text: greetings[Math.floor(Math.random() * greetings.length)],
         from: "bot" 
       };
       setMessages([initialGreeting]);
       speak(initialGreeting.text);
+      setHasGreeted(true);
+      
+      anime({
+        targets: '.welcome-particle',
+        translateY: [-50, 100],
+        translateX: () => anime.random(-50, 50),
+        scale: [0.5, 1.2],
+        opacity: [1, 0],
+        duration: 2000,
+        delay: anime.stagger(100),
+        easing: 'easeOutExpo'
+      });
     }
   }, [isOpen, messages.length]);
-  
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -321,21 +347,21 @@ export default function AIAgent() {
       const isPriceQuery = /price|cost|how much|discount|offer/i.test(query);
       const isDescQuery = /describe|description|details|about/i.test(query);
 
-      if (isColorQuery) return `🎨 Available colors for ${product.name}: ${product.colors.join(", ")}`;
-      if (isSizeQuery) return `📏 Available sizes for ${product.name}: ${product.sizes.join(", ")}`;
+      if (isColorQuery) return `Available colors for ${product.name}: ${product.colors.join(", ")}`;
+      if (isSizeQuery) return `Available sizes for ${product.name}: ${product.sizes.join(", ")}`;
       if (isPriceQuery) {
-        return `💰 Price for ${product.name}: ${product.newPrice || product.price}${
+        return ` Price for ${product.name}: ${product.newPrice || product.price}${
           product.oldPrice ? ` (Original: ${product.oldPrice}, Save ${Math.round(
             ((parseFloat((product.oldPrice || '').replace('$', '')) - 
             parseFloat(((product.newPrice || product.price) || '').replace('$', ''))) / 
             parseFloat((product.oldPrice || '').replace('$', ''))) * 100
           )}%)` : ''}`;
       }
-      if (isDescQuery) return `📝 ${product.name} Description:\n${product.description}`;
+      if (isDescQuery) return ` ${product.name} Description:\n${product.description}`;
 
-      return `🛍️ ${product.name}\n💵 Price: ${product.newPrice || product.price}${
-        product.oldPrice ? ` (🔖 Was ${product.oldPrice})` : ''}\n🎨 Colors: ${
-        product.colors.join(", ")}\n📏 Sizes: ${product.sizes.join(", ")}\n📄 Description: ${
+      return `${product.name}\n Price: ${product.newPrice || product.price}${
+        product.oldPrice ? ` ( Was ${product.oldPrice})` : ''}\n Colors: ${
+        product.colors.join(", ")}\n Sizes: ${product.sizes.join(", ")}\n Description: ${
         product.description}`;
     }
 
@@ -346,19 +372,19 @@ export default function AIAgent() {
       return `${userName ? `${userName}, we offer ` : "We offer "}FREE shipping on orders over $50! 3-5 business days delivery.`;
 
     if (/discount|sale|offer|promotion/.test(query)) 
-      return "🎉 Discounted items:\n- Loose Fit Bermuda Shorts\n- Sleeve Stripe T-Shirt\n- Vertical Striped Shirt";
+      return " Discounted items:\n- Loose Fit Bermuda Shorts\n- Sleeve Stripe T-Shirt\n- Vertical Striped Shirt";
 
     if (/return policy|returns?|exchange|refund/i.test(query))
-      return "📦 Return Policy:\n• 30-day returns\n• Items must be unworn with tags\n• Full refund to original payment\n• Start returns in 'Orders' section";
+      return "Return Policy:\n• 30-day returns\n• Items must be unworn with tags\n• Full refund to original payment\n• Start returns in 'Orders' section";
 
     if (/payment methods|credit card|paypal|how to pay/i.test(query))
-      return "💳 Accepted Payments:\n• Visa/Mastercard/Amex\n• PayPal\n• ShopCo Credits\n• Apple Pay/Google Pay";
+      return "Accepted Payments:\n• Visa/Mastercard/Amex\n• PayPal\n• ShopCo Credits\n• Apple Pay/Google Pay";
 
     if (/contact support|talk to someone|customer service|help line/i.test(query))
-      return "📞 Contact Us:\n• 24/7 Support\n• Call: 1-800-SHOPCO\n• Email: support@shopco.com\n• Live Chat available on website";
+      return "Contact Us:\n• 24/7 Support\n• Call: 1-800-SHOPCO\n• Email: support@shopco.com\n• Live Chat available on website";
 
     if (/thank|thanks|appreciate/i.test(query))
-      return `😊 You're welcome${userName ? `, ${userName}` : ""}! How else can I assist you?`;
+      return `You're welcome${userName ? `, ${userName}` : ""}! How else can I assist you?`;
 
     if (/recommend|suggest|what's good/.test(query))
       return `${userName ? `${userName}, here are our popular picks:` : "Popular picks:"}\n1. Classic Polo T-Shirt\n2. Green Bomber Jacket\n3. Gradient Graphic T-shirt`;
@@ -370,13 +396,14 @@ export default function AIAgent() {
 • Shipping info
 • Return policy
 • Payment methods`;
+  };
 
-
-  };  useEffect(() => {
+  useEffect(() => {
     if (!isOpen) {
       setMessages([]);
       setUserName("");
       setConversationStep('greeting');
+      setHasGreeted(false);
     }
   }, [isOpen]);
 
@@ -386,6 +413,20 @@ export default function AIAgent() {
 
   return (
     <div className="fixed bottom-5 right-5 z-50 sm:bottom-8 sm:right-8">
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute welcome-particle text-2xl opacity-0"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 50}%`
+            }}
+          >
+          </div>
+        ))}
+      </div>
+
       <motion.button
         onClick={() => {
           setIsOpen(!isOpen);
@@ -396,6 +437,9 @@ export default function AIAgent() {
         animate={{ scale: 1 }}
         whileHover={{ rotate: 12, scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
+        style={{
+          filter: buttonGlow ? 'drop-shadow(0 0 15px rgba(168, 85, 247, 0.8))' : 'none'
+        }}
       >
         {isOpen ? (
           <X size={28} className="transform transition-transform hover:rotate-90" />
