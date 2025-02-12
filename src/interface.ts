@@ -13,6 +13,7 @@ export interface Product {
     discountPercent: number; // Discount percentage
     isNew: boolean; // Indicates if the product is new or not
     _id: string; // Unique identifier for the product
+    imageUrl: string;
   }
   
   
